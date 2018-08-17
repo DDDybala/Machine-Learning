@@ -78,8 +78,8 @@ def trainNB0(trainMatrix,trainCategory):
         else:                                                #统计属于非侮辱类的条件概率所需的数据，即P(w0|0),P(w1|0),P(w2|0)···
             p0Num += trainMatrix[i]
             p0Denom += sum(trainMatrix[i])
-    p1Vect = p1Num/p1Denom                                      
-    p0Vect = p0Num/p0Denom
+    p1Vect = np.log(p1Num/p1Denom)                                      
+    p0Vect = np.log(p0Num/p0Denom)
     return p0Vect,p1Vect,pAbusive                            #返回属于侮辱类的条件概率数组，属于非侮辱类的条件概率数组，文档属于侮辱类的概率
 
 
@@ -105,8 +105,8 @@ def testingNB():
 
 
 def classifyNB(vec2Classify, p0Vec, p1Vec, pClass1):#定义分类函数
-    p1 = sum(vec2Classify * p1Vec) * pClass1  #element-wise mult
-    p0 = sum(vec2Classify * p0Vec) * (1.0 - pClass1)
+    p1 = sum(vec2Classify * p1Vec) + np.log( pClass1)  #element-wise mult
+    p0 = sum(vec2Classify * p0Vec) + np.log( (1.0 - pClass1))
     if p1 > p0:                                               #比较概率，判断词条更可能属于哪个类别
         return 1
     else: 
